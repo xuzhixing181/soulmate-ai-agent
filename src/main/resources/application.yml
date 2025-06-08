@@ -3,6 +3,18 @@ spring:
     name: xlei-ai-agent
   profiles:
     active: local
+  datasource:
+    url: jdbc:postgresql://PgSQL实例的公网地址/xlei_ai_agent
+    username: 用户名
+    password: 密码
+  ai:
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+
 server:
   port: 8123
   servlet:

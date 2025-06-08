@@ -15,11 +15,13 @@ public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
     @Override
     public AdvisedResponse aroundCall(AdvisedRequest advisedRequest, CallAroundAdvisorChain chain) {
+        // 1.处理请求(前置处理)
         advisedRequest = before(advisedRequest);
 
-        // 链式调用下一个Advisor
+        // 2.链式调用下一个Advisor
         AdvisedResponse advisedResponse = chain.nextAroundCall(advisedRequest);
 
+        // 3.处理请求(后置处理)
         observeAfter(advisedResponse);
         return advisedResponse;
     }
@@ -27,9 +29,10 @@ public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
     @Override
     public Flux<AdvisedResponse> aroundStream(AdvisedRequest advisedRequest, StreamAroundAdvisorChain chain) {
+
         advisedRequest = before(advisedRequest);
 
-        // 链式调用下一个Advisor
+        // 2.链式调用下一个Advisor
         Flux<AdvisedResponse> advisedResponse = chain.nextAroundStream(advisedRequest);
 
         return new MessageAggregator().aggregateAdvisedResponse(advisedResponse,this::observeAfter);
@@ -37,14 +40,18 @@ public class MyLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
 
     private AdvisedRequest before(AdvisedRequest advisedRequest) {
-//        log.info("AI advisor request: {}", advisedRequest.userText());
+        log.info("AI advisor request: {}", advisedRequest.userText());
         return advisedRequest;
     }
 
     private void observeAfter(AdvisedResponse advisedResponse) {
-//        log.info("AI advisor response: {}", advisedResponse.response().getResult().getOutput().getText());
+        log.info("AI advisor response: {}", advisedResponse.response().getResult().getOutput().getText());
     }
 
+    /**
+     * 为每个Advisor提供可供识别的名称
+     * @return
+     */
     @Override
     public String getName() {
         return this.getClass().getSimpleName();
