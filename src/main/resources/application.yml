@@ -1,6 +1,7 @@
 spring:
   application:
     name: xlei-ai-agent
+# 为保护账号的安全性,隐私配置写在 application-local.yml(不提交)
   profiles:
     active: local
   datasource:
@@ -14,7 +15,14 @@ spring:
         dimensions: 1536
         distance-type: COSINE_DISTANCE
         max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
-
+    dashscope:
+      api-key: Your API KEY
+      chat:
+        options:
+          model: qwen-plus
+# searchAPI
+search-api:
+  api-key: Your API KEY
 server:
   port: 8123
   servlet:
