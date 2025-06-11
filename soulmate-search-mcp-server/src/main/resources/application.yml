@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: soulmate-search-mcp-server
+  profiles:
+    active: stdio
+server:
+  port: 8127
+pexels:
+  api-key: e7re9PA5OMukAY57WcuZZVkWK2wkpvvTEwkOjqauK2A5Bbza5X4ChtFx
