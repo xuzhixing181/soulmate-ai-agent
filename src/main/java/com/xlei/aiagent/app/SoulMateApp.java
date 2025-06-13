@@ -1,12 +1,14 @@
 package com.xlei.aiagent.app;
 
 import com.xlei.aiagent.advisor.MyLoggerAdvisor;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -21,6 +23,9 @@ import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvis
 @Component
 @Slf4j
 public class SoulMateApp {
+
+    @Resource
+    private ToolCallback[] allTools;
 
     private final ChatClient chatClient;
 
@@ -87,6 +92,27 @@ public class SoulMateApp {
                 .call()
                 .entity(LoveReport.class);    // 需要添加依赖 jsonschema-generator,才能支持结构化数据转换
         return loveReport;
+    }
+
+    /**
+     * AI 恋爱报告功能（支持工具调用）
+     *
+     * @param message
+     * @param chatId
+     * @return
+     */
+    public String doChatWithToolCall(String message, String chatId) {
+        ChatResponse chatResponse = chatClient
+                .prompt()
+                .user(message)
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
+//                .tools(allTools)
+                .call()
+                .chatResponse();// 需要添加依赖 jsonschema-generator,才能支持结构化数据转换
+        String result = chatResponse.getResult().getOutput().getText();
+        log.info("use tool calling, result: {}", result);
+        return result;
     }
 
 
