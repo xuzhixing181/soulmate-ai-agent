@@ -14,7 +14,7 @@ public class FileOperationTool {
 
     private final String FILE_DIR = FileConstant.FILE_SAVE_DIR + "/doc";
     /**
-     * 从文本读取内容
+     * 从文本读取内容 (AI大模型通过工具的描述来判断是否要调用当前工具)
      * @param fileName
      * @return
      */

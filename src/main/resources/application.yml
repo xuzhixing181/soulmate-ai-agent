@@ -20,6 +20,16 @@ spring:
       chat:
         options:
           model: qwen-plus
+
+    # 临时注释掉，便于大家开发调试和部署
+#    mcp:
+#      client:
+#        sse:
+#          connections:
+#            server1:
+#              url: http://localhost:8127
+#        stdio:
+#          servers-configuration: classpath:mcp-servers.json
 # searchAPI
 search-api:
   api-key: Your API KEY
@@ -44,4 +54,8 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+# 修改日志级别，查看 Spring AI 更多调用细节
+logging:
+  level:
+    org.springframework.ai: DEBUG
 
